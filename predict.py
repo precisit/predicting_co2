@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split as tts
 from sklearn.tree import DecisionTreeRegressor as dtr
 from sklearn.ensemble import RandomForestRegressor as rfr
 from xgboost import XGBRegressor as xgb
-import matplotlib.pyplot as plt
+from matplotlib.pyplot import *
 import numpy as np
 
 from helpers import get_today
@@ -47,29 +47,44 @@ mae_rf = mae(pred_rf, val_y)
 print("rf:  {:,.6f}".format(mae_rf))
 
 # xgboost
-
 model_xgb = xgb(random_state = 1, n_estimators = 10000, learning_rate = 0.01)
 model_xgb.fit(train_X, train_y, early_stopping_rounds = 10, eval_set = [(val_X, val_y)], verbose = False)
 pred_xgb = model_xgb.predict(val_X)
 mae_xgb = mae(pred_xgb, val_y)
 print("xgb: {:,.6f}".format(mae_xgb))
 
-# let user make predictions
-# user_try = input('do you wanna make a prediction for today? [y/n] ')
-# while user_try.lower() != 'n' or user_try.lower() != 'no':
-#	if user_try.lower() == 'y' or user_try.lower() == 'yes':
+# make predictions for today
 user_X = get_today()
 print('\n')
 print('predicted ppm CO2 in atmosphere today')
 print('dt:  ', model_dt.predict(user_X)[0])
 print('rf:  ', model_rf.predict(user_X)[0])
 print('xgb: ', model_xgb.predict(user_X)[0])
-#		break
-#	else:
-#		user_try = input('weird response - what did you mean? [y/n] ')
-#		if user_try.lower() != 'n' or user_try.lower() != 'no':
-#			break
 
+# plot
+x_axis = X['Date'].sort_index(axis = 0)
+y_axis = y.sort_index(axis = 0)
+xt_axis = train_X['Date'].sort_index(axis = 0)
+yt_axis = train_y.sort_index(axis = 0)
+xv_axis = val_X['Date'].sort_index(axis = 0)
+yv_axis = val_y.sort_index(axis = 0)
+
+subplot(3, 1, 1)
+xticks([]), yticks([])
+title('All data')
+plot(x_axis, y_axis)
+
+subplot(3, 1, 2)
+xticks([]), yticks([])
+title('Training data')
+plot(xt_axis, yt_axis, 'r-')
+
+subplot(3, 1, 3)
+xticks([]), yticks([])
+title('Validation data')
+plot(xv_axis, yv_axis, 'g-')
+
+show()
 
 print('\n')
 print('done!')
