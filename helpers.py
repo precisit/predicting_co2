@@ -20,9 +20,9 @@ def get_day():
 
 def get_today():
 	year, month, day = get_date()
-	d = {'Year': [year], 'Month': [month], 'Date': [day]}
-	df = pd.DataFrame(data = d)
-	return df
+	# d = {'Year': [year], 'Month': [month], 'Date': [day]}
+	# df = pd.DataFrame(data = d)
+	return year, month, day
 
 def get_mae(model, x, y): # val x y
 	pred = model.predict(x)
@@ -41,9 +41,9 @@ def get_plot(X, y, train_X, train_y, val_X, val_y, model_dt, model_rf, model_xgb
 
 	xpa = get_day()
 
-	ya_dt = model_dt.predict(get_today())[0]
-	ya_rf = model_rf.predict(get_today())[0]
-	ya_xgb = model_xgb.predict(get_today())[0]
+	# ya_dt = model_dt.predict(get_today())[0]
+	# ya_rf = model_rf.predict(get_today())[0]
+	# ya_xgb = model_xgb.predict(get_today())[0]
 
 	subplot(3, 1, 1)
 	xticks([]), yticks([])

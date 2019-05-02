@@ -16,7 +16,7 @@ warnings.filterwarnings("ignore")
 
 # variables
 PATH = 'mod.csv'
-FEATURES = ['Year', 'Month', 'Date']
+FEATURES = ['Year', 'Month', 'Date', 'OM', 'OD', 'R', 'RM', 'T', 'TS', 'TD']
 AXIS = 'Date'
 
 # FIXME para med co2-data, befolkningsöknning, ökad tillväxt, mer?
@@ -50,15 +50,26 @@ model_xgb.fit(train_X, train_y, early_stopping_rounds = 10, eval_set = [(val_X, 
 get_mae(model_xgb, val_X, val_y)
 
 # make predictions for today
-user_X = get_today()
+year, month, day = get_today()
+om = 30.15
+od = 23.96
+r = 727
+rm = 701.35
+t = 6.45
+ts = 1.79
+td = 1.6
+
+d = {'Year': [year], 'Month': [month], 'Date': [day], 'OM': om, 'OD': od, 'R': r, 'RM': rm, 'T': t, 'TS': ts, 'TD': td}
+features_today = pd.DataFrame(data = d)
+
 print('\n')
 print('predicted ppm CO2 in atmosphere today')
-print('dt:  ', model_dt.predict(user_X)[0])
-print('rf:  ', model_rf.predict(user_X)[0])
-print('xgb: ', model_xgb.predict(user_X)[0])
+print('dt:  ', model_dt.predict(features_today)[0])
+print('rf:  ', model_rf.predict(features_today)[0])
+print('xgb: ', model_xgb.predict(features_today)[0])
 
 # plot
-get_plot(X, y, train_X, train_y, val_X, val_y, model_dt, model_rf, model_xgb, AXIS)
+# get_plot(X, y, train_X, train_y, val_X, val_y, model_dt, model_rf, model_xgb, AXIS)
 
 print('\n')
 print('done!')
